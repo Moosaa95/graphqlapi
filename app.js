@@ -10,12 +10,13 @@ const typeDefs = require('./graphql/typeDefs'); // this is the schema
 const resolvers = require('./graphql/resolvers'); // this is the resolvers
 
 
+port = process.env.PORT || 4000;
 //connect to mongodb
 mongoose.connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true }) 
     // promise to listen to the port
     .then(() => {
         console.log('Connected to mongodb')
-        return server.listen({ port: 4000 })
+        return server.listen(port)
     })
     .then((res) => {
         console.log(`Server is running on port ${res.port}`)
