@@ -4,7 +4,8 @@
   "description": "to create accounts and login",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "test": "jest"
   },
   "author": "moosa",
   "license": "ISC",
@@ -14,12 +15,16 @@
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "crypto": "^1.0.1",
+    "express": "^4.17.3",
     "graphql": "^16.3.0",
     "jsonwebtoken": "^8.5.1",
+    "mongodb-memory-server": "^8.4.0",
     "mongoose": "^6.2.3",
     "nodemailer": "^6.7.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "request": "^2.88.2"
   }
 }

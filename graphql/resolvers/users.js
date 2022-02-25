@@ -3,6 +3,7 @@ const { ApolloError } = require('apollo-server-errors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../../config');
+const { validateRegisterInput, validateLoginInput} = require('../../util/validators');
 
 function generateToken(user){
     // generate the token and return the token
@@ -10,7 +11,7 @@ function generateToken(user){
     return jwt.sign({
         id : user.id, 
         email : user.email,
-        username : user.username
+        name : user.name
     },SECRET_KEY, { expiresIn: '1h' });
 }
 
@@ -18,7 +19,7 @@ function generateToken(user){
 module.exports = {
   
     Mutation: {
-        async register(_, {registerInput: {name, email, password, confirmPassword}}) {
+        async register(_, {registerInput: {name, email, password, confirmPassword, country, mobilenumber}}) {
             /* to 
             check if the user is already registered or not
             throw an error if the user is already registered
@@ -30,6 +31,11 @@ module.exports = {
 
 
             */
+            const { errors, valid } = validateRegisterInput(name, email, password, confirmPassword, country, mobilenumber);
+            if(!valid){
+                throw new ApolloError('Errors', { errors });
+            }
+
             const user = await User.findOne({email}); // find the user by email
             if(user) {
                 throw new ApolloError('User already exists');
@@ -40,9 +46,12 @@ module.exports = {
             //encrypt password
             const passwordHash = await bcrypt.hash(password, 12);
             const newUser = new User({
-                name,
+                name : name,
                 email: email.toLowerCase(),
-                password: passwordHash
+                password: passwordHash, 
+                country : country,
+                mobilenumber : mobilenumber
+
             });
             const createdUser = await newUser.save(); // save the user to the database
             const token = generateToken(createdUser); // generate the token
@@ -65,7 +74,7 @@ module.exports = {
         }
     },
 
-    async login(_, { email, password }) {
+    async login(_, {loginInput :{ email, password} }) {
         const { errors, valid } = validateLoginInput(email, password);
         const user = await User.findOne({ email });
         if(!valid){

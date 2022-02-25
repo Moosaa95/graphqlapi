@@ -27,6 +27,7 @@ mongoose.connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true })
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    // mock: true,
 });
 
 
@@ -35,3 +36,5 @@ const server = new ApolloServer({
 // }   
 // );
 
+
+module.exports = server;
