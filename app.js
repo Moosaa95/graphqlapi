@@ -8,8 +8,11 @@ const mongoose = require('mongoose'); // this helps us to connect to mongodb
 const { MONGODB } = require('./config'); // this is the database configuration
 const typeDefs = require('./graphql/typeDefs'); // this is the schema
 const resolvers = require('./graphql/resolvers'); // this is the resolvers
+const dotenv = require('dotenv'); // this helps us to read the .env file
 
+dotenv.config(); // this helps us to read the .env file
 
+// port number or environment variable
 port = process.env.PORT || 4000;
 //connect to mongodb
 mongoose.connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true }) 
