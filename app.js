@@ -5,25 +5,12 @@ const mongoose = require('mongoose'); // this helps us to connect to mongodb
 
 
 //relative imports
-const { MONGODB } = require('./config'); // this is the database configuration
+// const { MONGODB } = require('./config'); // this is the database configuration
 const typeDefs = require('./graphql/typeDefs'); // this is the schema
 const resolvers = require('./graphql/resolvers'); // this is the resolvers
-const dotenv = require('dotenv'); // this helps us to read the .env file
+const connectDB = require('./config/db'); // this is the database configuration
 
-dotenv.config(); // this helps us to read the .env file
-
-// port number or environment variable
-port = process.env.PORT || 4000;
-//connect to mongodb
-mongoose.connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true }) 
-    // promise to listen to the port
-    .then(() => {
-        console.log('Connected to mongodb')
-        return server.listen(port)
-    })
-    .then((res) => {
-        console.log(`Server is running on port ${res.port}`)
-    })
+connectDB(); // this is the database configuration
 
 
 
@@ -34,11 +21,10 @@ const server = new ApolloServer({
     // mock: true,
 });
 
+server.listen({port:process.env.PORT || 4000})
+.then(({url})=>{
+    console.log(`Server ready at ${url}`);
+}
+);
 
-// server.listen().then(({ url }) => {
-//     console.log(`Server ready at ${url}`);
-// }   
-// );
-
-
-module.exports = server;
+// module.exports = server;
